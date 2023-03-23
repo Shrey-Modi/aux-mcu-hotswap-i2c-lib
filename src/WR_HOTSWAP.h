@@ -32,4 +32,35 @@ void InitHotswap();
  */
 void setShuntVoltageGain(uint32_t gain);
 
+/**
+ * @brief Set the Bus Voltage ADC Avg object
+ * 
+ * 
+ * @param avg 1,2,3,4,5,6,7 for 2,4,8,16,32,64,128 samples respectively
+ * 
+ * can either set this or ADC res but not both
+ */
+void setBusVoltageADCAvg(uint32_t avg);
+
+/**
+ * @brief Set the Shunt Voltage ADC Res object
+ * 
+ * @param res 9,10,11,12 for 9,10,11,12 bit resolution respectively
+ * 
+ * can either set this or ADC avg but not both
+ */
+void setShuntVoltageADCRes(uint32_t res);
+
+/**
+ * @brief Set the Shunt Voltage ADC Avg object
+ * 
+ * 
+ * @param avg 1,2,3,4,5,6,7 for 2,4,8,16,32,64,128 samples respectively
+ * 
+ * can either set this or ADC res but not both
+ */
+void setShuntVoltageADCAvg(uint32_t avg);
+
+
+
 #endif
