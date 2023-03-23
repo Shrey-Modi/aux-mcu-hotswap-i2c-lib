@@ -8,8 +8,8 @@
 #include "driverlib/pin_map.h"
 #include "driverlib/sysctl.h"
 
-
-void InitI2C(){
+void InitI2C()
+{
 
     SysCtlClockSet(SYSCTL_SYSDIV_1 | SYSCTL_USE_OSC | SYSCTL_OSC_MAIN |
                    SYSCTL_XTAL_16MHZ);
@@ -46,24 +46,20 @@ void InitI2C(){
     GPIOPinTypeI2CSCL(GPIO_PORTB_BASE, GPIO_PIN_2);
     GPIOPinTypeI2C(GPIO_PORTB_BASE, GPIO_PIN_3);
 
-
-
-
-
     I2CMasterInitExpClk(I2C0_BASE, SysCtlClockGet(), false);
-    while(I2CMasterBusy(I2C0_BASE));
+    while (I2CMasterBusy(I2C0_BASE))
+        ;
 
-
-    I2CMasterSlaveAddrSet(I2C0_BASE, SLAVE_ADDRESS, false);//setting up for write
-    while(I2CMasterBusy(I2C0_BASE));
-
+    I2CMasterSlaveAddrSet(I2C0_BASE, SLAVE_ADDRESS, false); // setting up for write
+    while (I2CMasterBusy(I2C0_BASE))
+        ;
 }
 
 void I2CSendString(uint32_t slave_addr, char array[])
 {
     // Tell the master module what address it will place on the bus when
     // communicating with the slave.
-    I2CSlaveACKOverride(I2C0_BASE, true);//check this line
+    I2CSlaveACKOverride(I2C0_BASE, true); // check this line
     I2CMasterSlaveAddrSet(I2C0_BASE, slave_addr, false);
 
     // put data to be sent into FIFO
@@ -87,7 +83,7 @@ void I2CSendString(uint32_t slave_addr, char array[])
     else
     {
         // Initiate send of data from the MCU
-        // 
+        //
         I2CMasterControl(I2C0_BASE, I2C_MASTER_CMD_BURST_SEND_START);
 
         // Wait until MCU is done transferring.
@@ -124,28 +120,28 @@ void I2CSendString(uint32_t slave_addr, char array[])
     }
 }
 
-void I2CRecieveString(uint32_t slave_addr, uint32_t reg_addr, char* array){
-    I2CMasterDataPut(I2C0_BASE, reg_addr);//sending reg pointer address for configuration register
+void I2CRecieveString(uint32_t slave_addr, uint32_t reg_addr, char *array)
+{
 
+    I2CMasterSlaveAddrSet(I2C0_BASE, SLAVE_ADDRESS, false); // setting up for write
+    while (I2CMasterBusy(I2C0_BASE))
+        ;
 
-         I2CMasterControl(I2C0_BASE, I2C_MASTER_CMD_SINGLE_SEND);
+    I2CMasterDataPut(I2C0_BASE, reg_addr); // sending reg pointer address for configuration register
 
+    I2CMasterControl(I2C0_BASE, I2C_MASTER_CMD_SINGLE_SEND);
 
-         while(I2CMasterBusy(I2C0_BASE));
+    while (I2CMasterBusy(I2C0_BASE))
+        ;
 
-
-         //
+    //
     // Modifiy the data direction to true, so that seeing the address will
     // indicate that the I2C Master is initiating a read from the slave.
     //
     I2CMasterSlaveAddrSet(I2C0_BASE, SLAVE_ADDRESS, true);
 
-
-
     //
     // Do a dummy receive to make sure you don't get junk on the first receive.
     //
     I2CMasterControl(I2C0_BASE, I2C_MASTER_CMD_SINGLE_RECEIVE);
-
-
 }
