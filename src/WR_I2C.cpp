@@ -8,7 +8,7 @@
 #include "driverlib/pin_map.h"
 #include "driverlib/sysctl.h"
 
-include "WR_I2C.h"
+#include "WR_I2C.h"
 
 void InitI2C(uint32_t slave_addr)
 {
@@ -125,7 +125,7 @@ void I2CSendString(uint32_t slave_addr, char array[])
 void I2CRecieveString(uint32_t slave_addr, uint32_t reg_addr, char *array)
 {
 
-    I2CMasterSlaveAddrSet(I2C0_BASE, SLAVE_ADDRESS, false); // setting up for write
+    I2CMasterSlaveAddrSet(I2C0_BASE, slave_addr, false); // setting up for write
     while (I2CMasterBusy(I2C0_BASE))
         ;
 
@@ -140,7 +140,7 @@ void I2CRecieveString(uint32_t slave_addr, uint32_t reg_addr, char *array)
     // Modifiy the data direction to true, so that seeing the address will
     // indicate that the I2C Master is initiating a read from the slave.
     //
-    I2CMasterSlaveAddrSet(I2C0_BASE, SLAVE_ADDRESS, true);
+    I2CMasterSlaveAddrSet(I2C0_BASE, slave_addr, true);
 
     //
     // Do a dummy receive to make sure you don't get junk on the first receive.
@@ -149,7 +149,7 @@ void I2CRecieveString(uint32_t slave_addr, uint32_t reg_addr, char *array)
 
     I2CMasterControl(I2C0_BASE, I2C_MASTER_CMD_BURST_RECEIVE_START);
 
-    for (ui32Index = 0; ui32Index < 2; ui32Index++)
+    for (uint32_t ui32Index = 0; ui32Index < 2; ui32Index++)
     {
 
         //

@@ -16,9 +16,10 @@ void InitHotswap()
     InitI2C(SLAVE_ADDRESS);
 }
 
-void setConfigReg(char[] array)
+void setConfigReg(char *array)
 {
-    I2CSendString(SLAVE_ADDRESS, CONFIG_REG_POINTER_ADRESS, array);
+    char data[] = {CONFIG_REG_POINTER_ADRESS, array[0], array[1], '\0'};
+    I2CSendString(SLAVE_ADDRESS, data);
 }
 
 void getConfigReg(char *array)
@@ -26,9 +27,10 @@ void getConfigReg(char *array)
     I2CRecieveString(SLAVE_ADDRESS, CONFIG_REG_POINTER_ADRESS, array);
 }
 
-void setCalibReg(char[] array)
+void setCalibReg(char *array)
 {
-    I2CSendString(SLAVE_ADDRESS, CALIB_REG_POINTER_ADRESS, array);
+    char data[] = {CALIB_REG_POINTER_ADRESS, array[0], array[1], '\0'};
+    I2CSendString(SLAVE_ADDRESS, data);
 }
 
 void getShuntReg(char *array)
@@ -82,7 +84,7 @@ void setBusVoltageADCRes(uint32_t res)
     char array[2];
     getConfigReg(array);
 
-    res = res-9
+    res = res-9;
     //bits 7-10 are BADC
     array[0] = array[0] & 0b11111000;//clearing BADC bits
     array[1] = array[1] & 0b01111111;//clearing BADC bits
@@ -132,7 +134,7 @@ void setShuntVoltageADCRes(uint32_t res)
     char array[2];
     getConfigReg(array);
 
-    res = res-9
+    res = res-9;
     //bits 3-6 are SADC
     array[1] = array[1] & 0b10000111;//clearing SADC bits
 
@@ -167,7 +169,7 @@ void setShuntVoltageADCAvg(uint32_t avg)
 /**
  * @brief reads the shunt voltage register and returns the value in 2s complement 2 byte integer
  * 
- * @return int16_t voltage multiplied by 100
+ * @return int16_t voltage in mV multiplied by 100
  */
 int16_t readShuntVoltage()
 {
@@ -191,5 +193,19 @@ int16_t readBusVoltage()
 
     int16_t voltage = (array[0] << 5) | (array[1] >> 3);    
 
-    return voltage;
+    return voltage*4;
+}
+
+/**
+ * @brief Set the Shunt Resistance in the calibration register
+ * 
+ * @param resistance in micro ohms
+ */
+void setShuntResistance(uint16_t resistance)
+{
+    char array[2];
+    uint16_t calib = 4096000000 / resistance;
+    array[0] = calib >> 8;
+    array[1] = calib & 0xFF;
+    setCalibReg(array);
 }
