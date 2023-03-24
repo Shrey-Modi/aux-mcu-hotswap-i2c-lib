@@ -61,6 +61,25 @@ void setShuntVoltageADCRes(uint32_t res);
  */
 void setShuntVoltageADCAvg(uint32_t avg);
 
+/**
+ * @brief reads the shunt voltage register and returns the value in 2s complement 2 byte integer
+ *
+ * @return int16_t voltage multiplied by 100
+ */
+int16_t readShuntVoltage();
 
+/**
+ * @brief reads the bus voltage register and returns the value in 2s complement 2 byte integer
+ *
+ * @return int16_t
+ */
+int16_t readBusVoltage();
+
+/**
+ * @brief Set the Shunt Resistance in the calibration register
+ * 
+ * @param resistance in micro ohms
+ */
+void setShuntResistance(uint16_t resistance);
 
 #endif
