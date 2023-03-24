@@ -6,8 +6,18 @@
 #ifndef __WR_HOTSWAP_H_
 #define __WR_HOTSWAP_H_
 
+
 #include <stdbool.h>
 #include <stdint.h>
+#include "inc/hw_i2c.h"
+#include "inc/hw_memmap.h"
+#include "inc/hw_types.h"
+#include "driverlib/gpio.h"
+#include "driverlib/i2c.h"
+#include "driverlib/pin_map.h"
+#include "driverlib/sysctl.h"
+
+#include "WR_I2C.h"
 
 #define SLAVE_ADDRESS 0x40
 #define CONFIG_REG_POINTER_ADRESS 0x00

@@ -1,5 +1,6 @@
 #include <stdbool.h>
 #include <stdint.h>
+#include <string.h>
 #include "inc/hw_i2c.h"
 #include "inc/hw_memmap.h"
 #include "inc/hw_types.h"
@@ -9,21 +10,19 @@
 #include "driverlib/sysctl.h"
 #include "driverlib/uart.h"
 #include "utils/uartstdio.h"
-#include <iostream>
-
+#include "driverlib/interrupt.h"
+#include "inc/hw_ints.h"
 #include "WR_HOTSWAP.h"
-#include "WR_SERIAL_UTILS.h"
+
+#ifndef __WR_SERIAL_UTILS_H_
+#define __WR_SERIAL_UTILS_H_
 
 
 
-int main()
-{
+void InitConsole(void);
+void UARTPrintOut(const uint8_t *pui8Buffer);
+void itoa(char *array, int16_t i);
+void setupUARTInterrupt();
 
-    InitConsole();
-    UARTPrintOut("\r\nTESTING-WR-HOTSWAP\r\n");
-    InitHotswap();
-    setupUARTInterrupt();
 
-    while(1);
-
-}
+#endif

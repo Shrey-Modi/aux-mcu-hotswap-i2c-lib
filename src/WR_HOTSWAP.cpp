@@ -1,14 +1,3 @@
-#include <stdbool.h>
-#include <stdint.h>
-#include "inc/hw_i2c.h"
-#include "inc/hw_memmap.h"
-#include "inc/hw_types.h"
-#include "driverlib/gpio.h"
-#include "driverlib/i2c.h"
-#include "driverlib/pin_map.h"
-#include "driverlib/sysctl.h"
-
-#include "WR_I2C.h"
 #include "WR_HOTSWAP.h"
 
 void InitHotswap()
@@ -184,7 +173,7 @@ int16_t readShuntVoltage()
 /**
  * @brief reads the bus voltage register and returns the value in 2s complement 2 byte integer
  * 
- * @return int16_t 
+ * @return int16_t bus voltage in mV
  */
 int16_t readBusVoltage()
 {
@@ -208,4 +197,31 @@ void setShuntResistance(uint16_t resistance)
     array[0] = calib >> 8;
     array[1] = calib & 0xFF;
     setCalibReg(array);
+}
+
+uint32_t readCurrent()
+{
+    char array[2];
+    getCurrentReg(array);
+
+    uint32_t current = (array[0] << 8) | array[1];    
+
+    return current;
+
+}
+
+/**
+ * @brief reads the power register
+ * 
+ * @return uint32_t current in watts
+ */
+uint32_t readPower()
+{
+    char array[2];
+    getPowerReg(array);
+
+    uint32_t power = (array[0] << 8) | array[1];    
+
+    return power;
+
 }
