@@ -9,7 +9,7 @@ ax = fig.add_subplot(1, 1, 1)
 xs = []
 ys = []
 
-ser = serial.Serial('COM6', 9600)
+ser = serial.Serial('COM7', 9600)
 # import random
 def get_data():
     ser.write(bytes("c", 'utf-8'))# c,s,b for current, shunt voltage, bus voltage respectively
@@ -17,7 +17,7 @@ def get_data():
     print(recieved, end="")
     if recieved == b'':
         return 0
-    data = int(recieved)
+    data = float(recieved)*(40/32767)
     return data
     # return random.randint(0, 100)
 
@@ -46,5 +46,5 @@ def animate(i, xs, ys):
     plt.ylabel('data')
 
 # Set up plot to call animate() function periodically
-ani = animation.FuncAnimation(fig, animate, fargs=(xs, ys), interval=1000)#interval is time resolution of graph
+ani = animation.FuncAnimation(fig, animate, fargs=(xs, ys), interval=500)#interval is time resolution of graph
 plt.show()

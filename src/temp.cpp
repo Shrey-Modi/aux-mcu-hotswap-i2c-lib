@@ -35,12 +35,15 @@ void itoa(char *array, int16_t i)
 int main()
 {
     char array[15];
-    int16_t a = 12;
+    int16_t a = 40960 / (((float)40/32767) * 1300);
 
     itoa(array, a);
 
+
+
     std::cout << array << std::endl;
 
+    printf("%d\n", a);
     
 
     

@@ -89,17 +89,39 @@ void UARTInterruptHandler(void)
     // Clear the asserted interrupts.
     //
     UARTIntClear(UART0_BASE, ui32Status);
+    char input = UARTCharGet(UART0_BASE);
 
-    if (UARTCharGet(UART0_BASE) == 'h')
+    if (input == 'b')
     {
         UARTPrintOut("\r\n");
-        int16_t t = readShuntVoltage();
+        int16_t t = readBusVoltage();
 
         itoa(array, t);
 
         UARTPrintOut((const uint8_t *)array);
         UARTPrintOut("\r\n");
     }
+
+    if (input == 'c')
+        {
+            UARTPrintOut("\r\n");
+            int16_t t = readCurrent();
+
+            itoa(array, t);
+
+            UARTPrintOut((const uint8_t *)array);
+            UARTPrintOut("\r\n");
+        }
+    if (input == 's')
+        {
+            UARTPrintOut("\r\n");
+            int16_t t = readShuntVoltage();
+
+            itoa(array, t);
+
+            UARTPrintOut((const uint8_t *)array);
+            UARTPrintOut("\r\n");
+        }
 }
 
 void setupUARTInterrupt()

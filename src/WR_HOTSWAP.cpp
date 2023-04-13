@@ -193,7 +193,13 @@ int16_t readBusVoltage()
 void setShuntResistance(uint16_t resistance)
 {
     char array[2];
-    uint16_t calib = 4096000000 / resistance;
+//    figure out LSB term which will be between maxI/32767 and maxI/4096
+    // maxI = 30A
+    //
+    uint16_t calib = 40960 /(LSB * resistance); // = 4096000000 / (resistance * LSB)
+    //should be 0.04096 / ((40/32767) * (1300/(10^6))) = 40960 / ((40/32767) * 1300) = 25810
+
+//    uint16_t calib = 25810;
     array[0] = calib >> 8;
     array[1] = calib & 0xFF;
     setCalibReg(array);

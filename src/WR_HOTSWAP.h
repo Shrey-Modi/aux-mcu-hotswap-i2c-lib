@@ -26,6 +26,7 @@
 #define POWER_REG_POINTER_ADRESS 0x03
 #define CURRENT_REG_POINTER_ADRESS 0x04
 #define CALIB_REG_POINTER_ADRESS 0x05
+#define LSB (float)40/32767 // taking maxI to be 40(actual was 30)
 
 /**
  * @brief initializes the hotswap controller and the I2C bus
@@ -91,5 +92,8 @@ int16_t readBusVoltage();
  * @param resistance in micro ohms
  */
 void setShuntResistance(uint16_t resistance);
+
+uint32_t readCurrent();
+
 
 #endif
